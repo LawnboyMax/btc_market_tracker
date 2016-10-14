@@ -4,10 +4,14 @@
 Real time Bitcoin market data tracker that runs in a terminal. Fully customizable.
 
 ![screenshot](http://i68.tinypic.com/8zk17t.png)
+
+A static version is also available.
+
+![screenshot](http://i68.tinypic.com/2mzfeoj.png)
 ## Getting Started
 Python3 is required.
 
-Just run `python3 btc_tracker.py`
+Just run `python3 btc_tracker.py` for real-time tracking or `python3 btc_tracker_static.py` for a single market data request.
 
 OR
 
@@ -26,7 +30,7 @@ Now `btc.sh` runs the script regardless of current working directory.
 
 To choose types of market data, currency and exchanges you want to display, make appropriate changes to `config` in `config_files` folder.
 
-Press `[q]` to exit the program.
+To exit btc_tracker.py press `[q]`.
 
 ## Supported exchanges
 
