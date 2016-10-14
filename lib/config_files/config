@@ -1,0 +1,25 @@
+Configuration is case insensetive. Entered values have to be separated by ', '.
+
+Supported exchanges:
+
+btc-e, bitstamp, okcoin, anxpro, hitbtc, bitfinex, taurus, quadrigacx, kraken
+
+Supported currencies: 
+
+USD, CAD, EUR, RUB, GBP, AUD, JPY 
+(Note: only one currency can be chosen at a time. Only exchanges that support chosen currency will be displayed.)
+
+Supported market data values: VWAP, high, low, buy, sell
+(Note: not all exchanges share their VWAP. For some reason Anxpro's VWAP is very low, but it is still provided.)
+
+Refresh rate has to be a positive integer.
+Using refresh rate < 2 seconds is not advised since some exchanges update their ticker information every two seconds.
+Note that this refresh rate determines how often the information is requested from exchanges. The real refresh rate depends on your internet connection
+and number of chosen exchanges, and will always be 0.5 - 3 seconds bigger than the value entered here.
+
+# CONFIGURATION #
+
+exchanges: btc-e, bitstamp, okcoin, anxpro, hitbtc, bitfinex, taurus, quadrigacx, kraken
+currency: usd
+data values: vwap, high, low, buy, sell
+refresh rate: 5
