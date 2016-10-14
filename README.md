@@ -20,7 +20,7 @@ $ set $PATH:(path to lib folder)
 $ mv btc.sh /usr/local/bin
 $ chmod 755 /usr/local/bin/btc.sh
 ````
-Now `./btc.sh` will run the script.
+Now `btc.sh` runs the script regardless of current working directory.
 
 ## Usage
 
