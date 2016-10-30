@@ -1,4 +1,5 @@
 import time
+
 # Methods that extract and format stats from exchange responses to API requests
 
 class ResponseUtility:
@@ -6,27 +7,27 @@ class ResponseUtility:
 
     # Selects method specific to chosen exchange and passes on the response
     @staticmethod
-    def select_exchange(response, exchange, display_values_list):
+    def select_exchange(response, exchange, watchlist):
 
         ResponseUtility.exchange = exchange
         if exchange == 'bitfinex':
-            return ResponseUtility().bitfinex_prices(response, display_values_list)
+            return ResponseUtility().bitfinex_prices(response, watchlist)
         elif exchange == 'kraken':
-            return ResponseUtility().kraken_prices(response, display_values_list)
+            return ResponseUtility().kraken_prices(response, watchlist)
         elif exchange == 'quadrigacx':
-            return ResponseUtility().quadriga_prices(response, display_values_list)
+            return ResponseUtility().quadriga_prices(response, watchlist)
         elif exchange == 'taurus':
-            return ResponseUtility().taurus_prices(response, display_values_list)
+            return ResponseUtility().taurus_prices(response, watchlist)
         elif exchange == 'btc-e':
-            return ResponseUtility().btce_prices(response, display_values_list)
+            return ResponseUtility().btce_prices(response, watchlist)
         elif exchange == 'bitstamp':
-            return ResponseUtility().bitstamp_prices(response, display_values_list)
+            return ResponseUtility().bitstamp_prices(response, watchlist)
         elif exchange == 'okcoin':
-            return ResponseUtility().okcoin_prices(response, display_values_list)
+            return ResponseUtility().okcoin_prices(response, watchlist)
         elif exchange == 'anxpro':
-            return ResponseUtility().anxpro_prices(response, display_values_list)
+            return ResponseUtility().anxpro_prices(response, watchlist)
         elif exchange == 'hitbtc':
-            return ResponseUtility().hitbtc_prices(response, display_values_list)
+            return ResponseUtility().hitbtc_prices(response, watchlist)
 
     # Rounds floats to SIG_DIG significant digits and return as str list. First element of list is exchange name.
     @staticmethod
@@ -41,7 +42,7 @@ class ResponseUtility:
 
     # Extract prices from Bitfinex response string
     @staticmethod
-    def bitfinex_prices(response, display_values_list):
+    def bitfinex_prices(response, watchlist):
         # Start index is inclusive, end index is exclusive
         low_index_start = response.find('low') + 6
         low_index_end = low_index_start + response[low_index_start:].find('\",\"')
@@ -53,15 +54,15 @@ class ResponseUtility:
         sell_index_end = sell_index_start + response[sell_index_start:].find('\",\"')
         # Convert prices to float
         price_list = []
-        if 'vwap' in display_values_list:
+        if 'vwap' in watchlist:
             price_list.append(0)
-        if 'low' in display_values_list:
+        if 'low' in watchlist:
            price_list.append(float(response[low_index_start : low_index_end]))
-        if 'high' in display_values_list:
+        if 'high' in watchlist:
             price_list.append(float(response[high_index_start : high_index_end]))
-        if 'buy' in display_values_list:
+        if 'buy' in watchlist:
            price_list.append(float(response[buy_index_start : buy_index_end]))
-        if 'sell' in display_values_list:
+        if 'sell' in watchlist:
             price_list.append(float(response[sell_index_start : sell_index_end]))
         price_list_rounded = ResponseUtility().round_prices(price_list) # Round prices
         price_list_rounded[1] = "N/A" # VWAP not available
@@ -69,7 +70,7 @@ class ResponseUtility:
 
     # Extract prices from Kraken response string
     @staticmethod
-    def kraken_prices(response, display_values_list):
+    def kraken_prices(response, watchlist):
         # Start index is inclusive, end index is exclusive
         vwap = response.find('\"p\"')
         vwap_index_start = vwap + response[vwap:].find('\",\"') + 3
@@ -86,22 +87,22 @@ class ResponseUtility:
         sell_index_end = sell_index_start + response[sell_index_start:].find('\",\"')
         # Convert prices to float
         price_list = []
-        if 'vwap' in display_values_list:
+        if 'vwap' in watchlist:
             price_list.append(float(response[vwap_index_start : vwap_index_end]))
-        if 'low' in display_values_list:
+        if 'low' in watchlist:
            price_list.append(float(response[low_index_start : low_index_end]))
-        if 'high' in display_values_list:
+        if 'high' in watchlist:
             price_list.append(float(response[high_index_start : high_index_end]))
-        if 'buy' in display_values_list:
+        if 'buy' in watchlist:
            price_list.append(float(response[buy_index_start : buy_index_end]))
-        if 'sell' in display_values_list:
+        if 'sell' in watchlist:
             price_list.append(float(response[sell_index_start : sell_index_end]))
         price_list_rounded = ResponseUtility().round_prices(price_list) # Round prices
         return price_list_rounded
 
     # Extract prices from Quadriga response string
     @staticmethod
-    def quadriga_prices(response, display_values_list):
+    def quadriga_prices(response, watchlist):
         # Start index is inclusive, end index is exclusive
         vwap_index_start = response.find('vwap') + 7
         vwap_index_end = vwap_index_start + response[vwap_index_start:].find('\",\"')
@@ -115,22 +116,22 @@ class ResponseUtility:
         sell_index_end = sell_index_start + response[sell_index_start:].find('\"}')
         # Convert prices to float
         price_list = []
-        if 'vwap' in display_values_list:
+        if 'vwap' in watchlist:
             price_list.append(float(response[vwap_index_start : vwap_index_end]))
-        if 'low' in display_values_list:
+        if 'low' in watchlist:
            price_list.append(float(response[low_index_start : low_index_end]))
-        if 'high' in display_values_list:
+        if 'high' in watchlist:
             price_list.append(float(response[high_index_start : high_index_end]))
-        if 'buy' in display_values_list:
+        if 'buy' in watchlist:
            price_list.append(float(response[buy_index_start : buy_index_end]))
-        if 'sell' in display_values_list:
+        if 'sell' in watchlist:
             price_list.append(float(response[sell_index_start : sell_index_end]))
         price_list_rounded = ResponseUtility().round_prices(price_list) # Round prices
         return price_list_rounded
 
     # Extract prices from Taurus response string
     @staticmethod
-    def taurus_prices(response, display_values_list):
+    def taurus_prices(response, watchlist):
         # Start index is inclusive, end index is exclusive
         vwap_index_start = response.find('vwap') + 7
         vwap_index_end = vwap_index_start + response[vwap_index_start:].find('\",\"')
@@ -144,22 +145,22 @@ class ResponseUtility:
         sell_index_end = sell_index_start + response[sell_index_start:].find('\",\"')
         # Convert prices to float
         price_list = []
-        if 'vwap' in display_values_list:
+        if 'vwap' in watchlist:
             price_list.append(float(response[vwap_index_start : vwap_index_end]))
-        if 'low' in display_values_list:
+        if 'low' in watchlist:
            price_list.append(float(response[low_index_start : low_index_end]))
-        if 'high' in display_values_list:
+        if 'high' in watchlist:
             price_list.append(float(response[high_index_start : high_index_end]))
-        if 'buy' in display_values_list:
+        if 'buy' in watchlist:
            price_list.append(float(response[buy_index_start : buy_index_end]))
-        if 'sell' in display_values_list:
+        if 'sell' in watchlist:
             price_list.append(float(response[sell_index_start : sell_index_end]))
         price_list_rounded = ResponseUtility().round_prices(price_list) # Round prices
         return price_list_rounded
 
     # Extract prices from Taurus response string
     @staticmethod
-    def btce_prices(response, display_values_list):
+    def btce_prices(response, watchlist):
         # Start index is inclusive, end index is exclusive
         low_index_start = response.find('low') + 5
         low_index_end = low_index_start + response[low_index_start:].find(',\"')
@@ -171,15 +172,15 @@ class ResponseUtility:
         sell_index_end = sell_index_start + response[sell_index_start:].find(',\"')
         # Convert prices to float
         price_list = []
-        if 'vwap' in display_values_list:
+        if 'vwap' in watchlist:
             price_list.append(0)
-        if 'low' in display_values_list:
+        if 'low' in watchlist:
            price_list.append(float(response[low_index_start : low_index_end]))
-        if 'high' in display_values_list:
+        if 'high' in watchlist:
             price_list.append(float(response[high_index_start : high_index_end]))
-        if 'buy' in display_values_list:
+        if 'buy' in watchlist:
            price_list.append(float(response[buy_index_start : buy_index_end]))
-        if 'sell' in display_values_list:
+        if 'sell' in watchlist:
             price_list.append(float(response[sell_index_start : sell_index_end]))
         price_list_rounded = ResponseUtility().round_prices(price_list) # Round prices
         price_list_rounded[1] = "N/A" # VWAP not available
@@ -187,7 +188,7 @@ class ResponseUtility:
 
      # Extract prices from Bitstamp response string
     @staticmethod
-    def bitstamp_prices(response, display_values_list):
+    def bitstamp_prices(response, watchlist):
         # Start index is inclusive, end index is exclusive
         vwap_index_start = response.find('vwap') + 8
         vwap_index_end = vwap_index_start + response[vwap_index_start:].find('\", \"')
@@ -201,22 +202,22 @@ class ResponseUtility:
         sell_index_end = sell_index_start + response[sell_index_start:].find('\", \"')
         # Convert prices to float
         price_list = []
-        if 'vwap' in display_values_list:
+        if 'vwap' in watchlist:
             price_list.append(float(response[vwap_index_start : vwap_index_end]))
-        if 'low' in display_values_list:
+        if 'low' in watchlist:
            price_list.append(float(response[low_index_start : low_index_end]))
-        if 'high' in display_values_list:
+        if 'high' in watchlist:
             price_list.append(float(response[high_index_start : high_index_end]))
-        if 'buy' in display_values_list:
+        if 'buy' in watchlist:
            price_list.append(float(response[buy_index_start : buy_index_end]))
-        if 'sell' in display_values_list:
+        if 'sell' in watchlist:
             price_list.append(float(response[sell_index_start : sell_index_end]))
         price_list_rounded = ResponseUtility().round_prices(price_list) # Round prices
         return price_list_rounded
 
      # Extract prices from OKCoin response string
     @staticmethod
-    def okcoin_prices(response, display_values_list):
+    def okcoin_prices(response, watchlist):
         # Start index is inclusive, end index is exclusive
         low_index_start = response.find('low') + 6
         low_index_end = low_index_start + response[low_index_start:].find('\",\"')
@@ -228,15 +229,15 @@ class ResponseUtility:
         sell_index_end = sell_index_start + response[sell_index_start:].find('\",\"')
          # Convert prices to float
         price_list = []
-        if 'vwap' in display_values_list:
+        if 'vwap' in watchlist:
             price_list.append(0)
-        if 'low' in display_values_list:
+        if 'low' in watchlist:
            price_list.append(float(response[low_index_start : low_index_end]))
-        if 'high' in display_values_list:
+        if 'high' in watchlist:
             price_list.append(float(response[high_index_start : high_index_end]))
-        if 'buy' in display_values_list:
+        if 'buy' in watchlist:
            price_list.append(float(response[buy_index_start : buy_index_end]))
-        if 'sell' in display_values_list:
+        if 'sell' in watchlist:
             price_list.append(float(response[sell_index_start : sell_index_end]))
         price_list_rounded = ResponseUtility().round_prices(price_list) # Round prices
         price_list_rounded[1] = "N/A" # VWAP not available
@@ -244,7 +245,7 @@ class ResponseUtility:
 
     # Extract prices from ANXPRO response string
     @staticmethod
-    def anxpro_prices(response, display_values_list):
+    def anxpro_prices(response, watchlist):
         # Start index is inclusive, end index is exclusive
         vwap = response.find('\"vwap\"')
         vwap_index_start = vwap + response[vwap:].find('\"value\":') + 10
@@ -263,22 +264,22 @@ class ResponseUtility:
         sell_index_end = sell_index_start + response[sell_index_start:].find('\"')
         # Convert prices to float
         price_list = []
-        if 'vwap' in display_values_list:
+        if 'vwap' in watchlist:
             price_list.append(float(response[vwap_index_start : vwap_index_end]))
-        if 'low' in display_values_list:
+        if 'low' in watchlist:
            price_list.append(float(response[low_index_start : low_index_end]))
-        if 'high' in display_values_list:
+        if 'high' in watchlist:
             price_list.append(float(response[high_index_start : high_index_end]))
-        if 'buy' in display_values_list:
+        if 'buy' in watchlist:
            price_list.append(float(response[buy_index_start : buy_index_end]))
-        if 'sell' in display_values_list:
+        if 'sell' in watchlist:
             price_list.append(float(response[sell_index_start : sell_index_end]))
         price_list_rounded = ResponseUtility().round_prices(price_list) # Round prices
         return price_list_rounded
 
-        # Extract prices from HitBTC response string
+    # Extract prices from HitBTC response string
     @staticmethod
-    def hitbtc_prices(response, display_values_list):
+    def hitbtc_prices(response, watchlist):
         # Start index is inclusive, end index is exclusive
         low_index_start = response.find('low') + 6
         low_index_end = low_index_start + response[low_index_start:].find('\",\"')
@@ -290,17 +291,18 @@ class ResponseUtility:
         sell_index_end = sell_index_start + response[sell_index_start:].find('\",\"')
          # Convert prices to float
         price_list = []
-        if 'vwap' in display_values_list:
+        if 'vwap' in watchlist:
             price_list.append(0)
-        if 'low' in display_values_list:
+        if 'low' in watchlist:
            price_list.append(float(response[low_index_start : low_index_end]))
-        if 'high' in display_values_list:
+        if 'high' in watchlist:
             price_list.append(float(response[high_index_start : high_index_end]))
-        if 'buy' in display_values_list:
+        if 'buy' in watchlist:
            price_list.append(float(response[buy_index_start : buy_index_end]))
-        if 'sell' in display_values_list:
+        if 'sell' in watchlist:
             price_list.append(float(response[sell_index_start : sell_index_end]))
         price_list_rounded = ResponseUtility().round_prices(price_list) # Round prices
         price_list_rounded[1] = "N/A" # VWAP not available
         return price_list_rounded
     
+
