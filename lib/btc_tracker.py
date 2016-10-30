@@ -14,11 +14,52 @@ url_list = ['https://api.bitfinex.com/v1', 'https://api.kraken.com/0/public/Tick
 # Supported configuration parameters
 available_exchanges = ['kraken', 'btc-e', 'bitstamp', 'okcoin', 'anxpro', 'hitbtc', 'bitfinex', 'taurus', 'quadrigacx']
 available_currencies = ['usd', 'cad', 'eur', 'rub', 'gbp', 'aud', 'jpy']
-avialiable_display_values = ['vwap', 'high', 'low', 'buy', 'sell']
+avialiable_watchlist_items = ['vwap', 'high', 'low', 'buy', 'sell']
+
+# Global variables
+exchange_list = []
+watchlist = []
+currency = ""
+refresh_rate = 15
 
 # Coordinates used by curses to display prices
 curses_yx = []
 
+# Get exchange names, currency and refresh rate from config. Check correctness.
+def read_config():
+    curr_dir = os.path.dirname(__file__)
+    config = os.path.join(curr_dir, 'config_files/config')
+    with open (config) as fp:
+        for line in fp:
+            if (line.startswith('exchanges:')):
+                global exchange_list
+                exchange_list = line[11:].strip().split(', ')     # Write exchanges to a list
+            elif (line.startswith('currency:')): 
+                global currency                
+                currency = line[10:].strip()
+            elif (line.startswith('watchlist:')):                 # Write to watchlist
+                global watchlist               
+                watchlist = line[11:].strip().split(', ')
+            try:
+                if (line.startswith('refresh rate:')):             # Read refresh rate
+                    global refresh_rate
+                    refresh_rate = int(line[13:].strip())
+            except ValueError:
+                sys.exit("Entered refresh rate is not a number. Please check config.")
+
+# Check if chosen exchanges/currency/watchlist_items are supported. Check for typos
+def check_config():
+    for exchange in exchange_list:
+        if exchange.lower() not in available_exchanges:
+            sys.exit("Exchange \'" + exchange + "\' is not a supported exchange. Please check config for the list of avalable exchanges.")
+    if currency not in available_currencies:
+        sys.exit("Selected currency \'" + currency + "\' is not supported. Please check config for the list of available currencies.")
+    for watchlist_items in watchlist:
+        if watchlist_items.lower() not in avialiable_watchlist_items:
+            sys.exit("Market data value \'" + watchlist_items + "\' is not supported. Please check config for the list of available data values.")
+    if refresh_rate <= 0:
+        sys.exit("Refresh rate should be a positive number.")
+            
 # Returns URL for selected exchange_name and currency. 
 # Returns -1 if exchange_name is invalid or if exchange doesn't support chosen currency.
 def get_url(exchange_name, currency):
@@ -99,11 +140,35 @@ def get_url(exchange_name, currency):
     else:
         return -1
 
+# Capitalize and display table headers
+def create_table(screen):
+    screen.addstr(0, 0, "Currency: " + currency.upper())
+    screen.addstr(2, 0, "Exchange", curses.A_STANDOUT)
+    k = 0
+    for value in watchlist:
+        if (value.lower() == 'vwap'):
+            header = 'VWAP'
+        else:
+            header = value.capitalize()
+        screen.addstr(2, (15 + 10 * k), header, curses.A_STANDOUT)
+        k = k + 1
+        
+    # Populate curses_yx 
+    col_num = len(exchange_list)
+    row_num = len(watchlist)
+    for c in range(0, col_num):
+        curses_yx.append([(4 + c * 2), 0])  # Leave more space between exchange name and first price in a row
+        curses_yx.append([(4 + c * 2), 15])
+        for r in range(0, row_num - 1):
+            curses_yx.append([(4 + c * 2), (r * 10 + 25)])
+
+
 # Infinite loop. Displays prices and updates them every (refresh_rate) # of seconds
-def display_prices(screen, refresh_rate, request_url_list, exchange_list, display_values_list):
+def display_prices(screen, request_url_list, exchange_list, watchlist):
 
     try:
         while True:
+
             j = 0
             # Reinitialize lists used for printing the retrieved prices
             price_table = [] 
@@ -111,11 +176,11 @@ def display_prices(screen, refresh_rate, request_url_list, exchange_list, displa
             # Request public ticker data from exchanges, extract prices and construct a 2D list (each exchange has its own row)
             for url in request_url_list:
                 response = requests.get(url).text
-                price_list = ResponseUtility.select_exchange(response, exchange_list[j], display_values_list)
+                price_list = ResponseUtility.select_exchange(response, exchange_list[j], watchlist)
                 price_table.append(price_list)
                 j = j + 1
-            j = 0
 
+            j = 0
             # Display prices
             for  ticker_stats in price_table:
                 for price in ticker_stats:
@@ -131,55 +196,15 @@ def display_prices(screen, refresh_rate, request_url_list, exchange_list, displa
                 if screen.getch() == ord('q'):
                     sys.exit()
 
-    except KeyboardInterrupt:
+    except KeyboardInterrupt:   # Handles Ctrl-C
         pass
 
 # Reads from config. Constructs table. Makes http requests.
 def main(screen):
     
     screen.nodelay(1)
-
-    # Get exchange names, currency and refresh rate from config. Check correctness.
-    curr_dir = os.path.dirname(__file__)
-    config = os.path.join(curr_dir, 'config_files/config')
-    with open (config) as fp:
-        for line in fp:
-            if (line.startswith('exchanges:')):
-                exchange_list = line[11:].strip().split(', ')
-            elif (line.startswith('currency:')):
-                currency = line[10:].strip()
-            elif (line.startswith('data values:')):
-                display_values_list = line[12:].strip().split(', ')
-            try:
-                if (line.startswith('refresh rate:')):
-                    refresh_rate = int(line[13:].strip())
-            except ValueError:
-                sys.exit("Entered refresh rate is not a number. Please check config.")
-
-    for exchange in exchange_list:
-        if exchange.lower() not in available_exchanges:
-            sys.exit("Exchange \'" + exchange + "\' is not a supported exchange. Please check config for the list of avalable exchanges.")
-    if currency not in available_currencies:
-        sys.exit("Selected currency \'" + currency + "\' is not supported. Please check config for the list of available currencies.")
-
-    for display_value in display_values_list:
-        if display_value.lower() not in avialiable_display_values:
-            sys.exit("Market data value \'" + display_value + "\' is not supported. Please check config for the list of available data values.")
-    if refresh_rate <= 0:
-        sys.exit("Refresh rate should be a positive number.")
-            
-
-    # Display the top of the table
-    screen.addstr(0, 0, "Currency: " + currency.upper())
-    screen.addstr(2, 0, "Exchange", curses.A_STANDOUT)
-    k = 0
-    for value in display_values_list:
-        if (value.lower() == 'vwap'):
-            header = 'VWAP'
-        else:
-            header = value.capitalize()
-        screen.addstr(2, (15 + 10 * k), header, curses.A_STANDOUT)
-        k = k + 1
+    read_config()
+    check_config()
        
     # Construct list of URLs for chosen exchanges and currency
     request_url_list = []
@@ -190,16 +215,8 @@ def main(screen):
             continue
         request_url_list.append(request_url)
 
-    # Populate curses_yx 
-    col_num = len(exchange_list)
-    row_num = len(display_values_list)
-    for c in range(0, col_num):
-        curses_yx.append([(4 + c * 2), 0])  # Leave more space between exchange name and first price in a row
-        curses_yx.append([(4 + c * 2), 15])
-        for r in range(0, row_num - 1):
-            curses_yx.append([(4 + c * 2), (r * 10 + 25)])
-
-    display_prices(screen, refresh_rate, request_url_list, exchange_list, display_values_list)
+    create_table(screen)
+    display_prices(screen, request_url_list, exchange_list, watchlist)
 
 if __name__ == "__main__":
     curses.wrapper(main)
