@@ -3,11 +3,11 @@
 # BTC Market Tracker
 Real time Bitcoin market data tracker that runs in a terminal. Fully customizable.
 
-![screenshot](http://i68.tinypic.com/8zk17t.png)
+![btc_tracker screenshot](http://i68.tinypic.com/8zk17t.png)
 
 A static version is also available.
 
-![screenshot](http://i68.tinypic.com/2mzfeoj.png)
+![btc_tracker_static screenshot](http://i68.tinypic.com/2mzfeoj.png)
 ## Getting Started
 Python3 is required.
 
