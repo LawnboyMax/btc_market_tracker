@@ -32,6 +32,10 @@ To choose types of market data, currency and exchanges you want to display, make
 
 To exit btc_tracker.py press `[q]`.
 
+## Known Problems and Troubleshooting
+
+If one of the exchange servers is down and the info from that exchange is requested, the program will not run. To fix this, try removing different exchanges from `config` until you find the one that causes the program to crash.
+
 ## Supported exchanges
 
 - [Bitfinex](https://www.bitfinex.com/): USD
