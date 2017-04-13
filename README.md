@@ -1,11 +1,10 @@
-<snippet>
-  <content>
-# BTC Market Tracker
+## BTC Market Tracker
+
 Real time Bitcoin market data tracker that runs in a terminal. Fully customizable.
 
 ![btc_tracker screenshot](http://i68.tinypic.com/8zk17t.png)
 
-A static version is also available.
+<strike>A static version is also available.</strike> Not working after recent ResponseUtility.py update. Will fix soon.
 
 ![btc_tracker_static screenshot](http://i68.tinypic.com/2mzfeoj.png)
 ## Getting Started
@@ -59,7 +58,7 @@ If one of the exchange servers is down and the info from that exchange is reques
 
 MIT License
 
-Copyright (c) 2016 Maxim Mikhaylov
+Copyright (c) 2016 Max Lawnboy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -78,4 +77,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-</snippet>
