@@ -1,0 +1,3 @@
+exchange: kraken, btc-e, bitstamp, okcoin, anxpro, hitbtc, bitfinex, taurus, quadrigacx
+currency: usd, cad, eur, rub, gbp, aud, jpy
+watchlist: vwap, high, low, buy, sell
