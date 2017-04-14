@@ -4,7 +4,7 @@ Real time Bitcoin market data tracker that runs in a terminal. Fully customizabl
 
 ![btc_tracker screenshot](http://i68.tinypic.com/8zk17t.png)
 
-<strike>A static version is also available.</strike> Not working after recent ResponseUtility.py update. Will fix soon.
+A static version is also available (retrieves information from servers once per run).
 
 ![btc_tracker_static screenshot](http://i68.tinypic.com/2mzfeoj.png)
 ## Getting Started
