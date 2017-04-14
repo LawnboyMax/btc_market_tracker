@@ -10,45 +10,48 @@ from ResponseUtility import ResponseUtility
 curses_yx = []
 
 # Extract list from field
-def get_list(fieldname, line):
+def getList(fieldname, line):
+    
     offset = len(fieldname) + len(': ')
     return line[offset:].strip().split(', ')
 
 # Get exchange names, currency and refresh rate from config. Check correctness.
-def read_config():
+def readConfig():
+
     curr_dir = os.path.dirname(__file__)
     config = os.path.join(curr_dir, 'config_files/config')
     with open (config) as fp:
         for line in fp:
             if (line.startswith('exchanges')):
                 global exchange_list
-                exchange_list = get_list('exchanges', line)     # Write exchanges to a list
+                exchange_list = getList('exchanges', line)     # Write exchanges to a list
             elif (line.startswith('currency')):
                 global currency_list
-                currency_list = get_list('currency', line)     # Write to currency list
+                currency_list = getList('currency', line)     # Write to currency list
             elif (line.startswith('watchlist')):                 
                 global watchlist
-                watchlist = get_list('watchlist', line)     # Write to watchlist
+                watchlist = getList('watchlist', line)     # Write to watchlist
             elif (line.startswith('refresh rate')):                 
                 global refresh_rate_list
-                refresh_rate_list = get_list('refresh rate', line)   # Write to refresh rate list
+                refresh_rate_list = getList('refresh rate', line)   # Write to refresh rate list
 
 # loads list of supported configuration parameters from field
-def load_avail_param(field):
+def loadAvailParam(field):
+
     curr_dir = os.path.dirname(__file__)
     param = os.path.join(curr_dir, 'dict/avail_param')
     l = []
     with open(param) as f:
         for line in f:
            if (line.startswith(field)):
-               l = get_list(field, line)
+               l = getList(field, line)
     return l
 
 # Check if chosen exchanges/currency/watchlist_items are supported. Check for typos
-def check_config():
+def checkConfig():
 
     # Check if specified exchanges are supported
-    available_exchanges = load_avail_param('exchange')
+    available_exchanges = loadAvailParam('exchange')
     for exchange in exchange_list:
         if exchange.lower() not in available_exchanges:
             sys.exit("Exchange \'" + exchange + "\' is not a supported exchange. Please check config for the list of avalable exchanges.")
@@ -56,14 +59,14 @@ def check_config():
     # Check if specified currency is supported and only one is entered
     if len(currency_list) != 1:
         sys.exit("Currency field contains more than one value.")
-    available_currencies = load_avail_param('currency')
+    available_currencies = loadAvailParam('currency')
     global currency
     currency = ''.join(currency_list)
     if currency not in available_currencies:
         sys.exit("Selected currency \'" + currency + "\' is not supported. Please check config for the list of available currencies.")
 
     # Check if specified watchitems are supported
-    available_watchitems = load_avail_param('watchlist')
+    available_watchitems = loadAvailParam('watchlist')
     for display_value in watchlist:
         if display_value.lower() not in available_watchitems:
             sys.exit("Market data value \'" + display_value + "\' is not supported. Please check config for the list of available data values.")
@@ -80,7 +83,7 @@ def check_config():
         sys.exit("Refresh rate should be a positive number.")
 
 # Creates a table using ncurses library and populates it
-def create_table(screen):
+def createTable(screen):
 
     # Display currency at the top of the table
     screen.addstr(0, 0, "Currency: " + currency.upper())
@@ -100,7 +103,7 @@ def create_table(screen):
     global request_url_list
     request_url_list = []
     for exchange in exchange_list[:]:
-        request_url = get_url(exchange, currency)
+        request_url = getUrl(exchange, currency)
         if (request_url == 1):
             exchange_list.remove(exchange)  # If exchange doesn't support chosen currency, remove from exchange_list
             continue
@@ -117,17 +120,17 @@ def create_table(screen):
 
 # Returns URL for selected exchange_name and currency. 
 # Returns -1 if exchange_name is invalid or if exchange doesn't support chosen currency.
-def get_url(exchange_name, currency):
+def getUrl(exchange_name, currency):
 
-    url_dict = load_url()
-    path_dict = load_path()
+    url_dict = loadUrl()
+    path_dict = loadPath()
     try:
         return url_dict[exchange_name] + path_dict[exchange_name,currency]
     except (KeyError, NameError):
         return 1
 
 # Loads dictionary of URL addresses for supported exchanges APIs
-def load_url():
+def loadUrl():
     curr_dir = os.path.dirname(__file__)
     urls = os.path.join(curr_dir, 'dict/url')
     d = {}
@@ -138,7 +141,7 @@ def load_url():
     return d
 
 # Loads dictionary of filepaths to BTC ticker in exchanges APIs
-def load_path():
+def loadPath():
     curr_dir = os.path.dirname(__file__)
     path = os.path.join(curr_dir, 'dict/url_path')
     d = {}
@@ -150,7 +153,7 @@ def load_path():
     return d
 
 # Infinite loop. Displays prices and updates them every (refresh_rate) # of seconds
-def display_prices(screen, refresh_rate, request_url_list, exchange_list, watchlist):
+def displayPrices(screen, refresh_rate, request_url_list, exchange_list, watchlist):
 
     try:
         while True:
@@ -188,11 +191,11 @@ def display_prices(screen, refresh_rate, request_url_list, exchange_list, watchl
 def main(screen):
 
     screen.nodelay(1)
-    read_config()
-    check_config()
-    create_table(screen)        
+    readConfig()
+    checkConfig()
+    createTable(screen)        
     # Infinite loop. Displays prices and updates them every (refresh_rate) # of seconds
-    display_prices(screen, refresh_rate, request_url_list, exchange_list, watchlist)
+    displayPrices(screen, refresh_rate, request_url_list, exchange_list, watchlist)
 
 if __name__ == "__main__":
     curses.wrapper(main)
