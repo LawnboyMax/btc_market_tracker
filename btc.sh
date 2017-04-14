@@ -1,3 +1,2 @@
 #!/bin/bash
-
-python3 ~/btc_tracker/lib/btc_tracker.py
+python3 ~/btc_tracker/lib/BtcTracker.py
