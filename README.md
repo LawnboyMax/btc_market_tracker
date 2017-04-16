@@ -29,7 +29,7 @@ Now `btc.sh` runs the script regardless of current working directory.
 
 To choose types of market data, currency and exchanges you want to display, make appropriate changes to `config` in `config_files` folder.
 
-To exit btc_tracker.py press `[q]`.
+To exit BtcTracker.py press `[q]`.
 
 ## Known Problems and Troubleshooting
 
