@@ -10,7 +10,7 @@ A static version is also available (retrieves information from servers once per 
 ## Getting Started
 Python3 is required.
 
-Just run `python3 btc_tracker.py` for real-time tracking or `python3 btc_tracker_static.py` for a single market data request.
+Just run `python3 BtcTracker.py` for real-time tracking or `python3 BtcTrackerStatic.py` for a single market data request.
 
 OR
 
