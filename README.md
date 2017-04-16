@@ -1,4 +1,4 @@
-## BTC Market Tracker
+# BTC Market Tracker
 
 Real time Bitcoin market data tracker that runs in a terminal. Fully customizable.
 
