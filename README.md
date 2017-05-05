@@ -58,7 +58,7 @@ If one of the exchange servers is down and the info from that exchange is reques
 
 MIT License
 
-Copyright (c) 2016 Max Lawnboy
+Copyright (c) 2016-17 Max Lawnboy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
