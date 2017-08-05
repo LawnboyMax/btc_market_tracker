@@ -2,11 +2,11 @@ Configuration is case insensetive. Entered values have to be separated by ', '.
 
 Supported exchanges:
 
-btc-e, bitstamp, okcoin, anxpro, hitbtc, bitfinex, taurus, quadrigacx, kraken
+bitstamp, okcoin, anxpro, hitbtc, bitfinex, taurus, quadrigacx, kraken
 
 Supported currencies: 
 
-USD, CAD, EUR, RUB, GBP, AUD, JPY 
+USD, CAD, EUR, GBP, AUD, JPY 
 (Note: only one currency can be chosen at a time. Only exchanges that support chosen currency will be displayed.)
 
 Supported market data values: VWAP, high, low, buy, sell
@@ -21,7 +21,7 @@ and number of chosen exchanges, and will always be 0.5 - 3 seconds bigger than t
 # CONFIGURATION #
 #################
 
-exchanges: btc-e, bitstamp, okcoin, anxpro, hitbtc, bitfinex, taurus, quadrigacx, kraken
+exchanges: bitstamp, okcoin, anxpro, hitbtc, bitfinex, taurus, quadrigacx, kraken
 currency: usd
 watchlist: vwap, high, low, buy, sell
 refresh rate: 5
