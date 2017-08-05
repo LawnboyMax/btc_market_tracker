@@ -7,9 +7,6 @@
 ('quadrigacx','usd') ?book=btc_usd
 ('quadrigacx','cad') ?book=btc_cad
 ('taurus','cad') /ticker
-('btc-e','usd') /btc_usd
-('btc-e','eur') /btc_eur
-('btc-e','rub') /btc_rur
 ('bitstamp','usd') /btcusd/
 ('bitstamp','eur') /btceur/
 ('okcoin','usd') ?symbol=btc_usd
