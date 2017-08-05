@@ -41,7 +41,6 @@ If one of the exchange servers is down and the info from that exchange is reques
 - [Kraken](https://www.kraken.com/): USD, CAD, EUR, GBP, JPY
 - [QuadrigaCX](https://www.quadrigacx.com/): USD, CAD
 - [Taurus](https://www.taurusexchange.com/): CAD
-- [BTC-E](https://btc-e.com/): USD, EUR, RUB
 - [Bitstamp](https://www.bitstamp.net/): USD, EUR
 - [OKCoin](https://www.okcoin.com/): USD
 - [ANXPRO](https://anxpro.com/): USD, CAD, EUR, GBP, AUD, JPY
